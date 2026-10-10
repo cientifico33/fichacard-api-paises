@@ -1,4 +1,4 @@
-import type { PaisCrudo, PaginaCruda } from './tiposCrudos.js';
+import type { ErrorCrudo, PaisCrudo, PaginaCruda } from './tiposCrudos.js';
 
 /**
  * Comprueba que la respuesta de la fuente tenga la forma que esperamos.
@@ -58,3 +58,14 @@ export const CAMPOS_SOLICITADOS = [
   'area.kilometers',
   'region',
 ].join(',');
+
+/** ¿La respuesta tiene la forma de un error de la fuente? */
+export function esErrorCrudo(valor: unknown): valor is ErrorCrudo {
+  if (typeof valor !== 'object' || valor === null) {
+    return false;
+  }
+
+  const errores = (valor as { errors?: unknown }).errors;
+
+  return Array.isArray(errores) && errores.length > 0;
+}
